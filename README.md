@@ -109,6 +109,9 @@ Once saved, these keys will be stored locally in a `config.json` file, and you w
 - **How to verify your file is correct:** The text IS embedded in your file. You can verify this using a dedicated desktop player like **VLC**, **AIMP**, or a tag editor like **Mp3tag**.
 - **The Solution:** To see the lyrics on your phone, use a music player app that is designed to prioritize local files and their metadata. Excellent free options include **AIMP** or **Musicolet** from the Google Play Store.
 
+**Q: Do I need to install FFmpeg or Git manually?**
+**A:** **No!** The `start.bat` script handles everything for you. It uses built-in Windows PowerShell commands to download a pre-compiled version of FFmpeg on the first run. No manual installation or extra software like Git is required.
+
 **Q: Can I use this on Mac or Linux?**
 **A:** The core Python code is cross-platform, but the `start.bat` and `setup.ps1` scripts are for Windows only. To run on Mac/Linux, you would need to manually create a virtual environment, run `pip install -r requirements.txt`, install FFmpeg, and then run `python3 main.py`.
 
