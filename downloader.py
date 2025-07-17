@@ -33,7 +33,7 @@ class DownloaderThread(threading.Thread):
             sp = spotipy.Spotify(auth_manager=auth_manager)
 
             self.log(get_string('connecting_genius', self.lang))
-            genius = lyricsgenius.Genius(self.keys['genius_token'], verbose=False, remove_section_headers=True)
+            genius = lyricsgenius.Genius(self.keys['genius_token'], verbose=False, remove_section_headers=True, timeout=15)
 
             tracks_to_process = []
             if "playlist" in self.spotify_url:
@@ -66,30 +66,45 @@ class DownloaderThread(threading.Thread):
                 if os.path.exists(mp3_filepath):
                     self.log(f"{get_string('song_skipped', self.lang)} {log_name}")
                     continue
+                
+                # --- ТУК ЗАПОЧВА НОВАТА ЛОГИКА ЗА ГРЕШКИ ---
+                try:
+                    # Стъпка 1: Сваляне
+                    self.log(f"{get_string('downloading_song', self.lang)} {log_name}")
+                    search_query = f"{artist_name} - {original_track_name} audio"
+                    ydl_opts = {
+                        'format': 'bestaudio/best',
+                        'postprocessors': [{'key': 'FFmpegExtractAudio', 'preferredcodec': 'mp3', 'preferredquality': '192'}],
+                        'outtmpl': os.path.join(self.download_path, f"{safe_filename}.%(ext)s"),
+                        'default_search': 'ytsearch1:', 'quiet': True, 'noprogress': True, 'ffmpeg_location': ffmpeg_path
+                    }
+                    with yt_dlp.YoutubeDL(ydl_opts) as ydl:
+                        ydl.download([search_query])
 
-                self.log(f"{get_string('downloading_song', self.lang)} {log_name}")
+                    # Стъпка 2: Добавяне на метаданни (вече сваленият файл е сигурен)
+                    self.add_metadata(mp3_filepath, track, genius)
+                    self.log(f"{get_string('song_done', self.lang)} {log_name}")
 
-                search_query = f"{artist_name} - {original_track_name} audio"
-                ydl_opts = {
-                    'format': 'bestaudio/best',
-                    'postprocessors': [{'key': 'FFmpegExtractAudio', 'preferredcodec': 'mp3', 'preferredquality': '192'}],
-                    'outtmpl': os.path.join(self.download_path, f"{safe_filename}.%(ext)s"),
-                    'default_search': 'ytsearch1:',
-                    'quiet': True, 'noprogress': True, 'ffmpeg_location': ffmpeg_path
-                }
-                with yt_dlp.YoutubeDL(ydl_opts) as ydl:
-                    ydl.download([search_query])
-
-                self.add_metadata(mp3_filepath, track, genius)
-                self.log(f"{get_string('song_done', self.lang)} {log_name}")
+                except Exception as download_error:
+                    # Този блок ще се изпълни САМО ако свалянето се провали
+                    self.log(f"!! CRITICAL DOWNLOAD ERROR for '{log_name}': {download_error}")
+                    if os.path.exists(mp3_filepath):
+                        try:
+                            os.remove(mp3_filepath)
+                            self.log(f"   -> Corrupted file deleted. The song will be retried on next run.")
+                        except OSError as e:
+                            self.log(f"   -> FAILED TO DELETE corrupted file: {e}")
+                    continue # Продължаваме към следващата песен
+                # --- КРАЙ НА НОВАТА ЛОГИКА ---
 
         except Exception as e:
-            self.log(f"CRITICAL ERROR: {e}")
+            self.log(f"CRITICAL ERROR (outside song loop): {e}")
         finally:
             self.log(get_string('process_finished', self.lang))
             self.on_finish()
 
     def add_metadata(self, mp3_filepath, track, genius):
+        # --- ТУК Е ВТОРАТА ЧАСТ ОТ ПРОМЯНАТА ---
         audio = MP3(mp3_filepath, ID3=ID3)
         if audio.tags is None: audio.add_tags()
 
@@ -97,24 +112,36 @@ class DownloaderThread(threading.Thread):
         masked_track_name = original_track_name + '\u200B'
         artist_name = track['artists'][0]['name']
         album_name = track['album']['name']
-        
-        if track['album']['images']:
-            album_art_url = track['album']['images'][0]['url']
-            response = requests.get(album_art_url)
-            if response.status_code == 200:
-                audio.tags.delall('APIC')
-                audio.tags.add(APIC(encoding=3, mime=response.headers.get('Content-Type', 'image/jpeg'), type=3, desc='Cover', data=response.content))
 
+        # Добавяме основните тагове
         audio.tags.add(TIT2(encoding=3, text=masked_track_name))
         audio.tags.add(TPE1(encoding=3, text=artist_name))
         audio.tags.add(TALB(encoding=3, text=album_name))
-        
-        song = genius.search_song(original_track_name, artist_name)
-        if song and song.lyrics:
-            cleaned_lyrics = song.lyrics.strip()
-            if cleaned_lyrics:
-                audio.tags.delall('USLT'); audio.tags.delall('SYLT')
-                audio.tags.add(USLT(encoding=3, lang='eng', desc='Lyrics', text=cleaned_lyrics))
-                audio.tags.add(SYLT(encoding=3, lang='eng', format=2, type=1, desc='Lyrics', text=[(cleaned_lyrics, 0)]))
 
+        # Опитваме да добавим обложка в отделен try-except блок
+        try:
+            if track['album']['images']:
+                album_art_url = track['album']['images'][0]['url']
+                response = requests.get(album_art_url, timeout=10)
+                if response.status_code == 200:
+                    audio.tags.delall('APIC')
+                    audio.tags.add(APIC(encoding=3, mime=response.headers.get('Content-Type', 'image/jpeg'), type=3, desc='Cover', data=response.content))
+        except Exception as art_error:
+            self.log(f"   -> INFO: Could not fetch album art: {art_error}")
+
+        # Опитваме да добавим текст в отделен try-except блок
+        try:
+            song = genius.search_song(original_track_name, artist_name)
+            if song and song.lyrics:
+                cleaned_lyrics = song.lyrics.strip()
+                if cleaned_lyrics:
+                    audio.tags.delall('USLT'); audio.tags.delall('SYLT')
+                    audio.tags.add(USLT(encoding=3, lang='eng', desc='Lyrics', text=cleaned_lyrics))
+                    audio.tags.add(SYLT(encoding=3, lang='eng', format=2, type=1, desc='Lyrics', text=[(cleaned_lyrics, 0)]))
+            else:
+                self.log(f"   -> INFO: Lyrics not found on Genius.com.")
+        except Exception as lyrics_error:
+            self.log(f"   -> INFO: Error fetching lyrics: {lyrics_error}")
+        
+        # Запазваме файла с каквато информация сме успели да съберем
         audio.save(v2_version=3)

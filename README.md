@@ -1,5 +1,7 @@
 <p align="center">
-  <img src="https://i.imgur.com/g7XWz9S.png" width="150" alt="SpotiDown Logo" />
+  <a href="https://github.com/YOUR_USERNAME/YOUR_REPO_NAME/releases">
+    <img src="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/.github/pic/SpotiDown.png" alt="SpotiDown Logo" />
+  </a>
 </p>
 
 <h1 align="center">SpotiDown</h1>
@@ -8,7 +10,8 @@
 <p align="center">
   <a href="#about-the-project">About</a> •
   <a href="#features">Features</a> •
-  <a href="#how-to-install-and-run">Installation</a> •
+  <a href="#requirements">Requirements</a> •
+  <a href="#installation">Installation</a> •
   <a href="#how-to-use">How to Use</a> •
   <a href="#troubleshooting--faq">Troubleshooting & FAQ</a> •
   <a href="#disclaimer">Disclaimer</a>
@@ -28,92 +31,82 @@ Unlike other downloaders, SpotiDown focuses on enriching your music library by f
 
 - **Download Single Tracks or Full Playlists:** Just provide a Spotify URL.
 - **High-Quality Audio:** Downloads audio from YouTube and converts it to MP3 (192kbps).
-- **Rich Metadata:** Automatically embeds tags from Spotify and Genius.com:
-  - High-Resolution Album Art
-  - Track Title, Artist, Album Name
-  - Full Song Lyrics (in both `USLT` and `SYLT` formats for maximum compatibility)
+- **Rich Metadata:** Automatically embeds tags from Spotify and Genius.com.
 - **Fully Automated Setup:** A smart script handles all dependencies for you.
-- **Portable & Self-Contained:** Automatically downloads a local copy of FFmpeg, no system-wide installation needed.
-- **User-Friendly Interface:**
-  - Clean UI with multi-language support (EN, BG, ES).
-  - First-time setup wizard for API keys.
-  - Option to change your download folder.
-  - Settings menu to update API keys later.
+- **Portable & Self-Contained:** Automatically downloads a local copy of FFmpeg. **No manual installation needed!**
+- **User-Friendly Interface:** Clean UI with multi-language support, settings menu, and more.
 
 <br>
 
-<h2 id="how-to-install-and-run">How to Install and Run</h2>
+<h2 id="requirements">Requirements</h2>
+
+There is only **one manual prerequisite** before you can run the application:
+
+-   **Python:** You must have Python (version 3.8 or higher) installed.
+    -   You can download it from [**python.org**](https://www.python.org/).
+    -   **IMPORTANT:** During the Python installation, you **must** check the box that says **"Add Python to PATH"**. The setup script relies on this.
+
+<p align="center">
+  <img src="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/.github/pic/python.png" alt="Add Python to PATH checkbox" />
+</p>
+
+### What is handled automatically?
+
+You **do not** need to install any of the following yourself. The `start.bat` script will handle them for you:
+-   All required Python libraries (`spotipy`, `yt-dlp`, etc.).
+-   **FFmpeg:** The script automatically downloads a pre-compiled, portable version. **You do not need Git.**
+
+<br>
+
+<h2 id="installation">Installation</h2>
 
 The installation is designed to be as simple as possible.
 
 ### Step 1: Download the Project
 
-1.  Go to the **[Releases Page](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME/releases)** of this repository. <!-- ЗАМЕНИ С ТВОЯ ЛИНК -->
+1.  Go to the **[Releases Page](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME/releases)** of this repository.
 2.  Download the latest `SpotiDown_v1.0.zip` file.
-3.  Extract the ZIP file to a permanent folder on your computer (e.g., `C:\Tools\SpotiDown`). **Do not run it from the Desktop or Downloads folder, as files might get moved.**
+3.  Extract the ZIP file to a permanent folder on your computer (e.g., `C:\Tools\SpotiDown`).
 
 ### Step 2: Run the Setup & Launch Script
 
-Inside the extracted folder, simply double-click the **`start.bat`** file.
+Inside the extracted folder, simply double-click the **`start.bat`** file. The script will automatically install all dependencies and then launch the application.
 
 <p align="center">
-  <img src="https://i.imgur.com/yF5g5eR.png" alt="Double-click start.bat" />
+  <img src="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/.github/pic/start.png" alt="Automated setup process" />
 </p>
-
-**What happens on the first run?**
-A command-line window will appear and perform a one-time setup:
-1.  It will check if you have Python installed.
-2.  It will create a local Python virtual environment (`.venv` folder) to keep dependencies isolated.
-3.  It will install all required Python libraries from `requirements.txt`.
-4.  It will **automatically download and set up FFmpeg** for you.
-5.  Finally, it will launch the SpotiDown application.
 
 This initial setup might take a few minutes depending on your internet speed. All subsequent launches will be instant.
 
 ### Step 3: Enter Your API Keys
 
-The first time the app launches, it will prompt you to enter your API keys. This is necessary to fetch high-quality metadata.
-
-- **Spotify Keys:** Go to your [Spotify Developer Dashboard](https://developer.spotify.com/dashboard/) to create an app and get your `Client ID` and `Client Secret`.
-- **Genius Key:** Go to [Genius API Clients page](https://genius.com/api-clients) to generate your `Access Token`.
-
-Once saved, these keys will be stored locally in a `config.json` file, and you won't be asked for them again. You can change them later from the "Settings" menu.
+The first time the app launches, it will prompt you to enter your API keys from Spotify and Genius.com. Once saved, you won't be asked for them again. You can change them later from the "Settings" menu.
 
 <br>
 
 <h2 id="how-to-use">How to Use</h2>
 
 <p align="center">
-  <img src="https://i.imgur.com/vHq8Y8L.png" width="600" alt="SpotiDown App Interface" />
+  <img src="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/.github/pic/app.png" width="600" alt="SpotiDown App Interface" />
 </p>
 
 1.  **Launch:** Double-click `start.bat`.
 2.  **Set Download Folder:** Click **"Browse..."** to choose where your music will be saved.
 3.  **Paste URL:** Copy a link to a Spotify track or playlist and paste it into the URL field.
 4.  **Download:** Click the **"Start Download"** button.
-5.  **Enjoy:** Your new MP3 files, complete with all metadata, will appear in your chosen folder.
 
 <br>
 
 <h2 id="troubleshooting--faq">Troubleshooting & FAQ</h2>
 
-**Q: The black command window shows an error and closes.**
+**Q: The setup script (black window) shows an error and closes.**
 **A:** This is usually due to a network issue or a firewall/antivirus blocking the script.
-- Make sure you have a stable internet connection.
-- Try running `start.bat` as an Administrator (right-click -> "Run as administrator").
-- Check if your antivirus software is blocking PowerShell or the download of FFmpeg.
+-   Make sure you have a stable internet connection.
+-   Try running `start.bat` as an Administrator (right-click -> "Run as administrator").
+-   Check if your antivirus software is blocking PowerShell or the download of FFmpeg.
 
-**Q: I downloaded a song, but the lyrics don't show up in my music app (e.g., Huawei Music, Samsung Music).**
-**A:** **This is expected behavior for many default phone music players.**
-- **Why it happens:** Modern streaming-focused apps (like Huawei/Samsung Music, Spotify, Apple Music) are designed to **ignore local metadata** for recognizable songs. Instead, they fetch official, licensed, and time-synced lyrics from their own online servers. They do this for legal reasons and to provide a consistent "karaoke-style" experience.
-- **How to verify your file is correct:** The text IS embedded in your file. You can verify this using a dedicated desktop player like **VLC**, **AIMP**, or a tag editor like **Mp3tag**.
-- **The Solution:** To see the lyrics on your phone, use a music player app that is designed to prioritize local files and their metadata. Excellent free options include **AIMP** or **Musicolet** from the Google Play Store.
-
-**Q: Do I need to install FFmpeg or Git manually?**
-**A:** **No!** The `start.bat` script handles everything for you. It uses built-in Windows PowerShell commands to download a pre-compiled version of FFmpeg on the first run. No manual installation or extra software like Git is required.
-
-**Q: Can I use this on Mac or Linux?**
-**A:** The core Python code is cross-platform, but the `start.bat` and `setup.ps1` scripts are for Windows only. To run on Mac/Linux, you would need to manually create a virtual environment, run `pip install -r requirements.txt`, install FFmpeg, and then run `python3 main.py`.
+**Q: I downloaded a song, but the lyrics don't show up in my phone's music app.**
+**A:** **This is expected behavior for many default phone music players.** Modern streaming apps are designed to **ignore local metadata** and fetch lyrics from their own online servers. To see the embedded lyrics, use a player that prioritizes local files, such as **AIMP** or **Musicolet** (free on Google Play Store).
 
 <br>
 
