@@ -1,6 +1,6 @@
 <p align="center">
-  <a href="https://github.com/YOUR_USERNAME/YOUR_REPO_NAME/releases">
-    <img src="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/.github/pic/SpotiDown.png" alt="SpotiDown Logo" />
+  <a href="https://github.com/K1ta3ca/SpotiDown/releases">
+    <img src=".github/pic/SpotiDown.png" alt="SpotiDown Logo" />
   </a>
 </p>
 
@@ -47,7 +47,7 @@ There is only **one manual prerequisite** before you can run the application:
     -   **IMPORTANT:** During the Python installation, you **must** check the box that says **"Add Python to PATH"**. The setup script relies on this.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/.github/pic/python.png" alt="Add Python to PATH checkbox" />
+  <img src=".github/pic/python.png" alt="Add Python to PATH checkbox" />
 </p>
 
 ### What is handled automatically?
@@ -64,7 +64,7 @@ The installation is designed to be as simple as possible.
 
 ### Step 1: Download the Project
 
-1.  Go to the **[Releases Page](https://github.com/YOUR_USERNAME/YOUR_REPO_NAME/releases)** of this repository.
+1.  Go to the **[Releases Page](https://github.com/K1ta3ca/SpotiDown/releases)** of this repository.
 2.  Download the latest `SpotiDown_v1.0.zip` file.
 3.  Extract the ZIP file to a permanent folder on your computer (e.g., `C:\Tools\SpotiDown`).
 
@@ -73,7 +73,7 @@ The installation is designed to be as simple as possible.
 Inside the extracted folder, simply double-click the **`start.bat`** file. The script will automatically install all dependencies and then launch the application.
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/.github/pic/start.png" alt="Automated setup process" />
+  <img src=".github/pic/start.png" alt="Automated setup process" />
 </p>
 
 This initial setup might take a few minutes depending on your internet speed. All subsequent launches will be instant.
@@ -87,7 +87,7 @@ The first time the app launches, it will prompt you to enter your API keys from 
 <h2 id="how-to-use">How to Use</h2>
 
 <p align="center">
-  <img src="https://raw.githubusercontent.com/YOUR_USERNAME/YOUR_REPO_NAME/main/.github/pic/app.png" width="600" alt="SpotiDown App Interface" />
+  <img src=".github/pic/app.png" width="600" alt="SpotiDown App Interface" />
 </p>
 
 1.  **Launch:** Double-click `start.bat`.
