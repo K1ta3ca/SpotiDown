@@ -68,8 +68,9 @@ class App(tk.Tk):
         self.app_config = self.load_config()
         self.setup_ui()
         self.update_language()
-        if not self.app_config.get('api_keys'):
+        if not self.app_config.get('api_keys') or not all(self.app_config['api_keys'].values()):
             self.prompt_for_keys()
+
     def prompt_for_keys(self):
         current_keys = self.app_config.get('api_keys')
         prompt = ApiKeysPrompt(self, self.current_lang, current_keys)
@@ -79,6 +80,7 @@ class App(tk.Tk):
             messagebox.showinfo("Success", "API Keys saved successfully!", parent=self)
         elif not current_keys:
             self.destroy()
+            
     def load_config(self):
         if os.path.exists(CONFIG_FILE):
             try:
@@ -86,9 +88,11 @@ class App(tk.Tk):
                     return json.load(f)
             except (json.JSONDecodeError, AttributeError): pass
         return {'api_keys': None, 'download_path': 'downloads'}
+        
     def save_config(self):
         with open(CONFIG_FILE, 'w', encoding='utf-8') as f:
             json.dump(self.app_config, f, indent=4, ensure_ascii=False)
+            
     def setup_ui(self):
         self.title(get_string('window_title', self.current_lang))
         self.geometry("600x500")
@@ -98,21 +102,33 @@ class App(tk.Tk):
         settings_menu = tk.Menu(menubar, tearoff=0)
         menubar.add_cascade(label="Settings", menu=settings_menu)
         settings_menu.add_command(label="Change API Keys", command=self.prompt_for_keys)
+        
         main_frame = ttk.Frame(self, padding="10")
         main_frame.pack(fill=tk.BOTH, expand=True)
+        
         lang_frame = ttk.Frame(main_frame)
-        lang_frame.pack(fill=tk.X, pady=(0, 10))
+        lang_frame.pack(fill=tk.X, pady=(0, 15))
         self.lang_label = ttk.Label(lang_frame, text=get_string('lang_label', self.current_lang))
         self.lang_label.pack(side=tk.LEFT, padx=(0, 5))
         self.lang_var = tk.StringVar(value='English')
         self.lang_combo = ttk.Combobox(lang_frame, textvariable=self.lang_var, values=['English', 'Български', 'Español'], state='readonly')
         self.lang_combo.pack(side=tk.LEFT)
         self.lang_combo.bind('<<ComboboxSelected>>', self.on_lang_change)
+
+        service_frame = ttk.Frame(main_frame)
+        service_frame.pack(fill=tk.X, pady=(0, 5))
+        self.service_label = ttk.Label(service_frame, text=get_string('service_label', self.current_lang))
+        self.service_label.pack(side=tk.LEFT, padx=(0, 5))
+        self.service_var = tk.StringVar(value='Spotify')
+        self.service_combo = ttk.Combobox(service_frame, textvariable=self.service_var, values=['Spotify', 'YouTube'], state='readonly')
+        self.service_combo.pack(side=tk.LEFT)
+
         self.url_label = ttk.Label(main_frame, text=get_string('url_label', self.current_lang))
-        self.url_label.pack(anchor=tk.W)
+        self.url_label.pack(anchor=tk.W, pady=(10,0))
         self.url_entry = ttk.Entry(main_frame, width=70)
-        self.url_entry.pack(fill=tk.X, pady=5)
+        self.url_entry.pack(fill=tk.X, pady=(0,10))
         self.make_context_menu_for_entry(self.url_entry)
+        
         folder_frame = ttk.Frame(main_frame)
         folder_frame.pack(fill=tk.X, pady=5)
         self.folder_label = ttk.Label(folder_frame, text=get_string('download_folder_label', self.current_lang))
@@ -122,57 +138,77 @@ class App(tk.Tk):
         folder_entry.pack(side=tk.LEFT, fill=tk.X, expand=True, padx=5)
         self.browse_button = ttk.Button(folder_frame, text=get_string('browse_button', self.current_lang), command=self.browse_folder)
         self.browse_button.pack(side=tk.LEFT)
+
         self.start_button = ttk.Button(main_frame, text=get_string('start_button', self.current_lang), command=self.start_download)
-        self.start_button.pack(pady=10)
+        self.start_button.pack(pady=15)
+        
         self.progress_label = ttk.Label(main_frame, text=get_string('progress_label', self.current_lang))
         self.progress_label.pack(anchor=tk.W)
         self.progress_text = scrolledtext.ScrolledText(main_frame, height=15, state='disabled', wrap=tk.WORD)
         self.progress_text.pack(fill=tk.BOTH, expand=True)
+
     def browse_folder(self):
         folder_selected = filedialog.askdirectory()
         if folder_selected:
             self.download_path_var.set(folder_selected)
             self.app_config['download_path'] = folder_selected
             self.save_config()
+            
     def make_context_menu_for_entry(self, entry):
         context_menu = tk.Menu(self, tearoff=0)
         context_menu.add_command(label="Cut", command=lambda: entry.event_generate("<<Cut>>"))
         context_menu.add_command(label="Copy", command=lambda: entry.event_generate("<<Copy>>"))
         context_menu.add_command(label="Paste", command=lambda: entry.event_generate("<<Paste>>"))
         entry.bind("<Button-3>", lambda event: context_menu.tk_popup(event.x_root, event.y_root))
+        
     def on_lang_change(self, event=None):
         lang_map = {'English': 'en', 'Български': 'bg', 'Español': 'es'}
         self.current_lang = lang_map[self.lang_var.get()]
         self.update_language()
+        
     def update_language(self):
         self.title(get_string('window_title', self.current_lang))
         self.lang_label.config(text=get_string('lang_label', self.current_lang))
+        self.service_label.config(text=get_string('service_label', self.current_lang))
         self.url_label.config(text=get_string('url_label', self.current_lang))
         self.start_button.config(text=get_string('start_button', self.current_lang))
         self.progress_label.config(text=get_string('progress_label', self.current_lang))
         self.folder_label.config(text=get_string('download_folder_label', self.current_lang))
         self.browse_button.config(text=get_string('browse_button', self.current_lang))
+        
     def log_message(self, message):
         self.progress_text.config(state='normal')
         self.progress_text.insert(tk.END, message + "\n")
         self.progress_text.see(tk.END)
         self.progress_text.config(state='disabled')
         self.update_idletasks()
+        
     def start_download(self):
-        if not self.app_config.get('api_keys'):
-            messagebox.showerror("Error", "API Keys are not set. Please set them in the Settings menu.", parent=self)
+        # Проверката за API ключове вече е задължителна за всички операции
+        if not self.app_config.get('api_keys') or not all(self.app_config['api_keys'].values()):
+            messagebox.showerror("Грешка", "API ключовете не са настроени или са непълни. Моля, въведете ги от менюто 'Settings', за да използвате всички функции.", parent=self)
             return
-        url = self.url_entry.get()
-        if not url: return
+            
+        service = self.service_var.get().lower()
+        url = self.url_entry.get().strip()
+        if not url:
+            return
+
         self.start_button.config(state='disabled')
+        self.clear_log()
+        
+        download_path = self.download_path_var.get()
+        
+        downloader = DownloaderThread(url, service, self.app_config['api_keys'], self.current_lang, self.log_message, self.enable_start_button, download_path)
+        downloader.start()
+        
+    def enable_start_button(self):
+        self.start_button.config(state='normal')
+
+    def clear_log(self):
         self.progress_text.config(state='normal')
         self.progress_text.delete(1.0, tk.END)
         self.progress_text.config(state='disabled')
-        download_path = self.download_path_var.get()
-        downloader = DownloaderThread(url, self.app_config['api_keys'], self.current_lang, self.log_message, self.enable_start_button, download_path)
-        downloader.start()
-    def enable_start_button(self):
-        self.start_button.config(state='normal')
 
 if __name__ == "__main__":
     app = App()

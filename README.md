@@ -5,7 +5,7 @@
 </p>
 
 <h1 align="center">SpotiDown</h1>
-<h3 align="center">Download Spotify Tracks and Playlists with Full Metadata</h3>
+<h3 align="center">Download Spotify & YouTube Music with Full Metadata</h3>
 
 <p align="center">
   <a href="#about-the-project">About</a> •
@@ -21,20 +21,19 @@
 
 <h2 id="about-the-project">About The Project</h2>
 
-**SpotiDown** is a user-friendly desktop application for Windows that allows you to download any track or entire playlist from Spotify. 
+**SpotiDown** is a user-friendly desktop application for Windows that allows you to download any track or entire playlist from Spotify.
 
-Unlike other downloaders, SpotiDown focuses on enriching your music library by fetching and embedding a rich set of metadata directly into your MP3 files. Each downloaded song comes complete with its high-quality album art, artist and album info, and even full song lyrics, ensuring your offline music library looks great in any music player that properly supports local metadata.
+Unlike other downloaders, SpotiDown focuses on enriching your music library by fetching and embedding a rich set of metadata directly into your MP3 files. But it doesn't stop there - you can also paste a link from **YouTube**, and SpotiDown will intelligently identify the song, find its official data on Spotify, and download it with full album art, artist info, and even lyrics.
 
 <br>
 
 <h2 id="features">Features</h2>
 
-- **Download Single Tracks or Full Playlists:** Just provide a Spotify URL.
-- **High-Quality Audio:** Downloads audio from YouTube and converts it to MP3 (192kbps).
-- **Rich Metadata:** Automatically embeds tags from Spotify and Genius.com.
-- **Fully Automated Setup:** A smart script handles all dependencies for you.
-- **Portable & Self-Contained:** Automatically downloads a local copy of FFmpeg. **No manual installation needed!**
-- **User-Friendly Interface:** Clean UI with multi-language support, settings menu, and more.
+- **Spotify Downloads:** Download single tracks or full playlists directly from Spotify URLs.
+- **Smart YouTube Downloads:** Paste a YouTube link (single video or playlist), and the app will automatically identify the song, find its metadata on Spotify, and download it as a perfectly tagged MP3.
+- **Rich Metadata:** Automatically embeds high-quality album art, artist, album, title, and lyrics from Spotify and Genius.com.
+- **Fully Automated Setup:** A smart script handles all dependencies for you, including a local, portable version of FFmpeg. **No manual installation needed!**
+- [cite_start]**User-Friendly Interface:** Clean UI with a simple dropdown to select your service, multi-language support, and a persistent settings menu. [cite: 12]
 
 <br>
 
@@ -53,7 +52,7 @@ There is only **one manual prerequisite** before you can run the application:
 ### What is handled automatically?
 
 You **do not** need to install any of the following yourself. The `start.bat` script will handle them for you:
--   All required Python libraries (`spotipy`, `yt-dlp`, etc.).
+-   All required Python libraries (`spotipy`, `yt-dlp`, `thefuzz`, etc.).
 -   **FFmpeg:** The script automatically downloads a pre-compiled, portable version. **You do not need Git.**
 
 <br>
@@ -65,7 +64,7 @@ The installation is designed to be as simple as possible.
 ### Step 1: Download the Project
 
 1.  Go to the **[Releases Page](https://github.com/K1ta3ca/SpotiDown/releases)** of this repository.
-2.  Download the latest `SpotiDown_v1.0.zip` file.
+2.  Download the latest `SpotiDown_vX.X.zip` file.
 3.  Extract the ZIP file to a permanent folder on your computer (e.g., `C:\Tools\SpotiDown`).
 
 ### Step 2: Run the Setup & Launch Script
@@ -76,11 +75,11 @@ Inside the extracted folder, simply double-click the **`start.bat`** file. The s
   <img src=".github/pic/start.png" alt="Automated setup process" />
 </p>
 
-This initial setup might take a few minutes depending on your internet speed. All subsequent launches will be instant.
+This initial setup might take a few minutes. All subsequent launches will be instant.
 
 ### Step 3: Enter Your API Keys
 
-The first time the app launches, it will prompt you to enter your API keys from Spotify and Genius.com. Once saved, you won't be asked for them again. You can change them later from the "Settings" menu.
+The first time the app launches, it will prompt you to enter your API keys from Spotify and Genius.com. These are required for all features, including the smart YouTube song recognition. Once saved, you won't be asked for them again unless you want to change them from the "Settings" menu.
 
 <br>
 
@@ -91,9 +90,10 @@ The first time the app launches, it will prompt you to enter your API keys from 
 </p>
 
 1.  **Launch:** Double-click `start.bat`.
-2.  **Set Download Folder:** Click **"Browse..."** to choose where your music will be saved.
-3.  **Paste URL:** Copy a link to a Spotify track or playlist and paste it into the URL field.
-4.  **Download:** Click the **"Start Download"** button.
+2.  **Choose Service:** Select "Spotify" or "YouTube" from the dropdown menu.
+3.  **Set Download Folder:** Click **"Browse..."** to choose where your music will be saved.
+4.  **Paste URL:** Copy a link (track, playlist, or video) and paste it into the URL field. The app will automatically clean up the link for you.
+5.  **Download:** Click the **"Start"** button.
 
 <br>
 

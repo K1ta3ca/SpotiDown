@@ -5,15 +5,20 @@ LANGUAGES = {
         'bg': 'SpotiDown',
         'es': 'SpotiDown'
     },
+    'service_label': {
+        'en': 'Service:',
+        'bg': 'Услуга:',
+        'es': 'Servicio:'
+    },
     'url_label': {
-        'en': 'Spotify URL (Playlist or Track):',
-        'bg': 'Spotify URL (Плейлист или Песен):',
-        'es': 'URL de Spotify (Playlist o Canción):'
+        'en': 'URL (Playlist, Track, or Video):',
+        'bg': 'URL (Плейлист, Песен или Видео):',
+        'es': 'URL (Playlist, Canción o Video):'
     },
     'start_button': {
-        'en': 'Start Download',
+        'en': 'Start',
         'bg': 'Старт',
-        'es': 'Iniciar Descarga'
+        'es': 'Iniciar'
     },
     'progress_label': {
         'en': 'Log:',
@@ -64,6 +69,28 @@ LANGUAGES = {
         'en': '→ Skipped (already exists):',
         'bg': '→ Пропуснато (вече съществува):',
         'es': '→ Omitido (ya existe):'
+    },
+    'yt_metadata_search': {
+        'en': '   -> Searching for metadata for:',
+        'bg': '   -> Търсене на метаданни за:',
+        'es': '   -> Buscando metadatos para:'
+    },
+    # --- НОВ ТЕКСТ ---
+    'yt_cleaned_title': {
+        'en': '   -> Cleaned title for search:',
+        'bg': '   -> Почистено заглавие за търсене:',
+        'es': '   -> Título limpiado para búsqueda:'
+    },
+    # --- КРАЙ НА НОВИЯ ТЕКСТ ---
+    'yt_metadata_found': {
+        'en': '   -> Match found with {}% confidence:',
+        'bg': '   -> Намерено съвпадение със {}% сигурност:',
+        'es': '   -> Coincidencia encontrada con {}% de confianza:'
+    },
+    'yt_metadata_not_found': {
+        'en': '   -> INFO: Could not find a confident metadata match. Saving with original title.',
+        'bg': '   -> ИНФО: Не е намерено достатъчно добро съвпадение. Файлът е запазен с оригиналното заглавие.',
+        'es': '   -> INFO: No se encontró una coincidencia de metadatos confiable. Guardando con el título original.'
     },
     'process_finished': {
         'en': '\n--- Finished! ---',
